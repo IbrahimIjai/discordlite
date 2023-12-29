@@ -19,26 +19,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      {" "}
       <html lang="en">
         <body className={inter.className}>
           {" "}
+          <ClerkProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem={false}
             storageKey="discord-theme"
           >
             <SocketProvider>
               <QueryProvider>
-                <ModalProvider />
+                {/* <ModalProvider /> */}
                 {children}
               </QueryProvider>
             </SocketProvider>
           </ThemeProvider>
+          </ClerkProvider>
         </body>
       </html>
-    </ClerkProvider>
+    
   );
 }
