@@ -14,7 +14,7 @@ import { EditChannelModal } from "@/components/modals/edit-channel-modal";
 import { MessageFileModal } from "@/components/modals/message-file-modal";
 import { DeleteMessageModal } from "@/components/modals/delete-message-modal";
 
-export const ModalProvider = ({children}: {children:React.ReactNode}) => {
+export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -38,7 +38,6 @@ export const ModalProvider = ({children}: {children:React.ReactNode}) => {
       <EditChannelModal />
       <MessageFileModal />
       <DeleteMessageModal />
-      {children}
     </>
   );
 };
