@@ -11,14 +11,14 @@ import React from "react";
 
 function LanguageSelect() {
   return (
-    <Select defaultValue={Language[0].name}>
-      <SelectTrigger className="w-[180px]">
+    <Select  defaultValue={Language[0].name}>
+      <SelectTrigger className="w-[180px] bg-[#23272a] shadow-lg">
         <SelectValue placeholder={Language[0].name} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-[#23272a] shadow-lg border">
         {Language.map((item, i) => (
           <SelectItem key={i} value={item.name}>
-            <div className="flex">
+            <div className="flex items-center gap-3">
               <p>{item.name}</p>
               <div className="relative w-4 h-4">
                 <Image

@@ -18,7 +18,7 @@ export default function Features() {
             <div className="relative w-full h-[200px] md:flex-1">
               <Image fill src={item.icons} alt={`image rep ${item.title}`} />
             </div>
-            <div className="flex flex-col gap-4 text-lg items-start text-left mt-6 md:flex-1">
+            <div className="flex flex-col items-start gap-4 mt-6 text-lg text-left md:flex-1">
               <h1 className="font-bold md:text-4xl">{item.title}</h1>
               <p>{item.description}</p>
             </div>
@@ -26,10 +26,10 @@ export default function Features() {
         ))}
       </div>
       <div className="bg-[#f6f6f6] text-center px-6 py-12 md:px-10 md:py-20 w-full">
-        <h1 className="font-extrabold text-xl lg:text-3xl md:text-4xl uppercase ">
+        <h1 className="text-xl font-extrabold uppercase lg:text-3xl md:text-4xl ">
           Reliable tech for staying close
         </h1>
-        <p className="text-lg mt-4">
+        <p className="mt-4 text-lg">
           Low-latency voice and video feels like youre in the same room. Wave
           hello over video, watch friends stream their games, or gather up and
           have a drawing session with screen share.
@@ -43,12 +43,16 @@ export default function Features() {
           />
         </div>
       </div>
-      <div className="w-full px-6 pb-12 md:px-10 md:pb-20 flex item-center justify-center flex-col gap-8">
-          <h1 className="font-extrabold text-xl lg:text-3xl md:text-4xl">
+      <div className="flex flex-col items-center justify-center w-full gap-8 px-6 py-12 text-center md:px-10 md:py-20">
+          <h1 className="text-xl font-extrabold lg:text-3xl md:text-4xl">
             Ready to start your journey?
           </h1>
-          <Button className="bg-[#404eed] text-lg text-white">
-            <DownloadCloud className="w-4 h-4 mr-2 font-bold" />
+          <Button className="bg-[#404eed] text-lg text-white lg:w-fit">
+            <DownloadCloud className="w-4 h-4 mr-2 font-bold " />
+            Download for Windows
+          </Button>
+          <Button className="h-6 px-3 text-xs rounded-md">
+            <DownloadCloud className="w-4 h-4 mr-2 font-bold " />
             Download for Windows
           </Button>
         </div>

@@ -15,6 +15,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Icons } from "@/components/Icons";
 import { DoorClosed, Menu } from "lucide-react";
 import { Separator } from "../ui/separator";
+import { SafetyNav } from "./SafetyNav";
 
 export function MobileNav() {
   const segment = useSelectedLayoutSegment();
@@ -24,14 +25,14 @@ export function MobileNav() {
       <SheetTrigger asChild>
         <Button
           variant="ghost"
-          className="mr-2 rounded-tl-lg overflow-hidden px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+          className="px-0 mr-2 overflow-hidden text-base rounded-tl-lg hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
         >
-          <Icons.menu className="h-8 w-8 font-bold" />
+          <Icons.menu className="w-8 h-8 font-bold" />
         </Button>
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="px-8  bg-white text-black border-none overflow-hidden rounded-tl-[10px]"
+        className="px-8  bg-white text-black border-none overflow-hidden rounded-tl-[6px]"
       >
         <div className="">
           <Link href="/" onClick={() => setIsOpen(false)}>
@@ -41,17 +42,20 @@ export function MobileNav() {
 
         <ScrollArea className="my-2 h-[calc(100vh-16rem)] pb-2 ">
           <Separator className="bg-gray-300" />
-          <div className="mt-4 w-full">
-            {NavLinks?.map((item, index) => (
-              <MobileLink
-                key={index}
-                setIsOpen={setIsOpen}
-                segment={String(segment)}
-                href={item.href}
-              >
-                {item.title}
-              </MobileLink>
-            ))}
+          <div className="w-full mt-4">
+            {NavLinks?.map((item, index) => {
+              if (item.isButton) return <SafetyNav/>;
+              return (
+                <MobileLink
+                  key={index}
+                  setIsOpen={setIsOpen}
+                  segment={String(segment)}
+                  href={item.href}
+                >
+                  {item.title}
+                </MobileLink>
+              );
+            })}
           </div>
         </ScrollArea>
       </SheetContent>

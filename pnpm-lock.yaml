@@ -30,6 +30,8 @@ specifiers:
   class-variance-authority: ^0.7.0
   clsx: ^2.0.0
   cmdk: ^0.2.0
+  date-fns: ^3.0.6
+  emoji-mart: ^5.5.2
   eslint: ^8
   eslint-config-next: 14.0.4
   livekit-client: ^1.15.5
@@ -57,7 +59,7 @@ specifiers:
 dependencies:
   '@clerk/nextjs': 4.29.1_hhw7wgihwfazgzbvi55hs2pcf4
   '@emoji-mart/data': 1.1.2
-  '@emoji-mart/react': 1.1.1_react@18.2.0
+  '@emoji-mart/react': 1.1.1_kyrnz3vmphzqyjjk2ivrm6bcsu
   '@hookform/resolvers': 3.3.3_react-hook-form@7.49.2
   '@livekit/components-react': 1.5.1_wec5ltrlx2hxscyya33sltj54a
   '@livekit/components-styles': 1.0.8
@@ -80,6 +82,8 @@ dependencies:
   class-variance-authority: 0.7.0
   clsx: 2.0.0
   cmdk: 0.2.0_yok4whjnfjlfyjmdmcaku5uzjq
+  date-fns: 3.0.6
+  emoji-mart: 5.5.2
   livekit-client: 1.15.5
   livekit-server-sdk: 1.2.7
   lucide-react: 0.303.0_react@18.2.0
@@ -222,12 +226,13 @@ packages:
     resolution: {integrity: sha512-1HP8BxD2azjqWJvxIaWAMyTySeZY0Osr83ukYjltPVkNXeJvTz7yDrPLBtnrD5uqJ3tg4CcLuuBW09wahqL/fg==}
     dev: false
 
-  /@emoji-mart/react/1.1.1_react@18.2.0:
+  /@emoji-mart/react/1.1.1_kyrnz3vmphzqyjjk2ivrm6bcsu:
     resolution: {integrity: sha512-NMlFNeWgv1//uPsvLxvGQoIerPuVdXwK/EUek8OOkJ6wVOWPUizRBJU0hDqWZCOROVpfBgCemaC3m6jDOXi03g==}
     peerDependencies:
       emoji-mart: ^5.2
       react: ^16.8 || ^17 || ^18
     dependencies:
+      emoji-mart: 5.5.2
       react: 18.2.0
     dev: false
 
@@ -2340,6 +2345,10 @@ packages:
     resolution: {integrity: sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==}
     dev: true
 
+  /date-fns/3.0.6:
+    resolution: {integrity: sha512-W+G99rycpKMMF2/YD064b2lE7jJGUe+EjOES7Q8BIGY8sbNdbgcs9XFTZwvzc9Jx1f3k7LB7gZaZa7f8Agzljg==}
+    dev: false
+
   /debug/3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -2458,6 +2467,10 @@ packages:
   /email-regex/5.0.0:
     resolution: {integrity: sha512-he76Cm8JFxb6OGQHabLBPdsiStgPmJeAEhctmw0uhonUh1pCBsHpI6/rB62s2GNzjBb0YlhIcF/1l9Lp5AfH0Q==}
     engines: {node: '>=12'}
+    dev: false
+
+  /emoji-mart/5.5.2:
+    resolution: {integrity: sha512-Sqc/nso4cjxhOwWJsp9xkVm8OF5c+mJLZJFoFfzRuKO+yWiN7K8c96xmtughYb0d/fZ8UC6cLIQ/p4BR6Pv3/A==}
     dev: false
 
   /emoji-regex/8.0.0:
