@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./global.css";
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ModalProvider } from "@/providers/modal-provider";
 import { SocketProvider } from "@/providers/socket-provider";
@@ -19,13 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
-          {" "}
-          <ClerkProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
+            enableSystem={false}
             storageKey="discord-theme"
           >
             <SocketProvider>
@@ -35,9 +35,8 @@ export default function RootLayout({
               </QueryProvider>
             </SocketProvider>
           </ThemeProvider>
-          </ClerkProvider>
         </body>
       </html>
-    
+    </ClerkProvider>
   );
 }
