@@ -30,7 +30,7 @@ export default function RootLayout({
           >
             <SocketProvider>
               <QueryProvider>
-                <ModalProvider />
+                {/* <ModalProvider /> */}
                 {children}
               </QueryProvider>
             </SocketProvider>

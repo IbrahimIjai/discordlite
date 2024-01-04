@@ -5,6 +5,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+// import { useUser } from "@clerk/clerk-react";
 
 import {
   Dialog,
@@ -20,7 +21,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -29,16 +30,21 @@ import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, {
-    message: "Server name is required."
+    message: "Server name is required.",
   }),
   imageUrl: z.string().min(1, {
-    message: "Server image is required."
-  })
+    message: "Server image is required.",
+  }),
 });
 
+enum content {
+  join = "join",
+  create = "create",
+}
 export const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
-
+  const [contentView, setContentView] = useState<content>(content.create);
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -50,7 +56,7 @@ export const InitialModal = () => {
     defaultValues: {
       name: "",
       imageUrl: "",
-    }
+    },
   });
 
   const isLoading = form.formState.isSubmitting;
@@ -65,7 +71,7 @@ export const InitialModal = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   if (!isMounted) {
     return null;
@@ -75,65 +81,90 @@ export const InitialModal = () => {
     <Dialog open>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl text-center font-bold">
-            Customize your server
+          <DialogTitle className="font-bold flex gap-2 justify-center">
+            <Button
+              className={`${
+                contentView == content.join &&
+                "bg-[#404eed] text-white hover:bg-[#404eed]/70"
+              }`}
+              onClick={() => setContentView(content.join)}
+            >
+              Join Public Server
+            </Button>
+            <Button
+              className={`${
+                contentView == content.create &&
+                "bg-[#404eed] text-white hover:bg-[#404eed]/70"
+              }`}
+              onClick={() => setContentView(content.create)}
+            >
+              Customize your server
+            </Button>
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500">
-            Give your server a personality with a name and an image. You can always change it later.
+            {contentView == "create"
+              ? "Give your server a personality with a name and an image. You can always change it later."
+              : "Join great server, interact, connect, and be part of a great community"}
           </DialogDescription>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="space-y-8 px-6">
-              <div className="flex items-center justify-center text-center">
+        {contentView == content.create ? (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="space-y-8 px-6">
+                <div className="flex items-center justify-center text-center">
+                  <FormField
+                    control={form.control}
+                    name="imageUrl"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <FileUpload
+                            endpoint="serverImage"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 <FormField
                   control={form.control}
-                  name="imageUrl"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                        Server name
+                      </FormLabel>
                       <FormControl>
-                        <FileUpload
-                          endpoint="serverImage"
-                          value={field.value}
-                          onChange={field.onChange}
+                        <Input
+                          disabled={isLoading}
+                          className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                          placeholder="Enter server name"
+                          {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel
-                      className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70"
-                    >
-                      Server name
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                        placeholder="Enter server name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading}>
-                Create
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+              <DialogFooter className="bg-gray-100 px-6 py-4">
+                <Button variant="primary" disabled={isLoading}>
+                  Create
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        ) : (
+          <div></div>
+        )}
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
+
+const ServerCardList = () => {
+  return <div></div>;
+};

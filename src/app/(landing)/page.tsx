@@ -24,9 +24,13 @@ const Home = async () => {
   if (server) {
     return redirect(`/servers/${server.id}`);
   }
+  if (!server) {
+    return <InitialModal />;
+  }
   return (
     <div className="w-full min-h-screen bg-white">
-      <Header />
+      <Header bg="#404eed" />
+      <div></div>
       <Heros />
       <Features />
       <Footer />

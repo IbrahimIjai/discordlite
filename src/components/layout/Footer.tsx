@@ -7,7 +7,7 @@ import { Icons } from "../Icons";
 import { Button } from "../ui/button";
 function Footer() {
   return (
-    <div className="bg-[#23272a] w-full  px-8 py-20">
+    <div className="bg-[#23272a] text-white w-full  px-8 py-20">
       <div className="grid w-full md:grid-cols-8">
         <div className="gap-6 pt-3 md:col-span-3">
           <LanguageSelect />
