@@ -25,7 +25,7 @@ const Home = async () => {
     return redirect(`/servers/${server.id}`);
   }
   if (!server) {
-    return <InitialModal />;
+    return <InitialModal profile={profile}/>;
   }
   return (
     <div className="w-full min-h-screen bg-white">

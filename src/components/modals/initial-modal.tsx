@@ -27,6 +27,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import { db } from "@/lib/db";
+import Image from "next/image";
+import { Skeleton } from "../ui/skeleton";
+import { ScrollArea } from "../ui/scroll-area";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -41,11 +46,15 @@ enum content {
   join = "join",
   create = "create",
 }
-export const InitialModal = () => {
+export const InitialModal = ({ profile }: { profile: any }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [contentView, setContentView] = useState<content>(content.create);
+  const [servers, setServers] = useState(null);
+  const [loadingServer, setServersLoading] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
+
+  console.log("this is user", user);
 
   useEffect(() => {
     setIsMounted(true);
@@ -58,7 +67,18 @@ export const InitialModal = () => {
       imageUrl: "",
     },
   });
-
+  const loadServers = async () => {
+    try {
+      setServersLoading(true);
+      const serverslist = await axios.get("/api/servers");
+      serverslist && setServers(serverslist.data);
+      console.log("this is servers list", serverslist.data);
+      setServersLoading(false);
+    } catch (error) {
+      console.log(error);
+      setServersLoading(false);
+    }
+  };
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -79,15 +99,18 @@ export const InitialModal = () => {
 
   return (
     <Dialog open>
-      <DialogContent className="bg-white text-black p-0 overflow-hidden">
-        <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="font-bold flex gap-2 justify-center">
+      <DialogContent className="p-0 overflow-hidden text-black bg-white">
+        <DialogHeader className="px-6 pt-8">
+          <DialogTitle className="flex justify-center gap-2 font-bold">
             <Button
               className={`${
                 contentView == content.join &&
                 "bg-[#404eed] text-white hover:bg-[#404eed]/70"
               }`}
-              onClick={() => setContentView(content.join)}
+              onClick={() => {
+                loadServers();
+                setContentView(content.join);
+              }}
             >
               Join Public Server
             </Button>
@@ -110,7 +133,7 @@ export const InitialModal = () => {
         {contentView == content.create ? (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="space-y-8 px-6">
+              <div className="px-6 space-y-8">
                 <div className="flex items-center justify-center text-center">
                   <FormField
                     control={form.control}
@@ -134,13 +157,13 @@ export const InitialModal = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                      <FormLabel className="text-xs font-bold uppercase text-zinc-500 dark:text-secondary/70">
                         Server name
                       </FormLabel>
                       <FormControl>
                         <Input
                           disabled={isLoading}
-                          className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                          className="text-black border-0 bg-zinc-300/50 focus-visible:ring-0 focus-visible:ring-offset-0"
                           placeholder="Enter server name"
                           {...field}
                         />
@@ -150,7 +173,7 @@ export const InitialModal = () => {
                   )}
                 />
               </div>
-              <DialogFooter className="bg-gray-100 px-6 py-4">
+              <DialogFooter className="px-6 py-4 bg-gray-100">
                 <Button variant="primary" disabled={isLoading}>
                   Create
                 </Button>
@@ -158,13 +181,89 @@ export const InitialModal = () => {
             </form>
           </Form>
         ) : (
-          <div></div>
+          <ScrollArea className="my-2 h-[calc(50vh-3rem)] pb-2 rounded-lg flex flex-col items-center w-full gap-3 mx-6">
+            {loadingServer ? (
+              <ServersSkeleton />
+            ) : servers ? (
+              // @ts-ignore
+              servers?.map((item: ServerTsError, i) => (
+                <ServerCardList
+                  key={item.id}
+                  id={item.id}
+                  name={item.name}
+                  inviteCode={item.inviteCode}
+                  imageUrl={item.imageUrl}
+                />
+              ))
+            ) : (
+              <div>No server found</div>
+            )}
+          </ScrollArea>
         )}
       </DialogContent>
     </Dialog>
   );
 };
 
-const ServerCardList = () => {
-  return <div></div>;
+const ServerCardList = ({
+  name,
+  id,
+  imageUrl,
+  inviteCode,
+}: {
+  name: string;
+  id: string;
+  imageUrl: string;
+  inviteCode: string;
+}) => {
+  const router = useRouter();
+  return (
+    <div className="flex bg-[#f6f6f6] rounded-lg border w-4/5 mb-4 p-3">
+      <div className="relative w-12 h-12 ">
+        <Image src={imageUrl} alt={`${name} display pics`} fill />
+      </div>
+      <div className="flex items-center justify-between w-full px-5">
+        <h1 className="text-lg font-bold">{name}</h1>
+        <Button
+          className="bg-[#404eee]"
+          onClick={() => router.push(`/invite/${inviteCode}`)}
+        >
+          Join
+        </Button>
+      </div>
+    </div>
+  );
 };
+
+const ServersSkeleton = () => {
+  return (
+    <div>
+      <div className="flex items-center gap-3 mx-2 mb-4">
+        <Skeleton className="w-20 h-12" />
+        <Skeleton className="w-full h-12" />
+      </div>
+      <div className="flex items-center gap-3 mx-2 mb-4">
+        <Skeleton className="w-20 h-12" />
+        <Skeleton className="w-full h-12" />
+      </div>
+      <div className="flex items-center gap-3 mx-2 mb-4">
+        <Skeleton className="w-20 h-12" />
+        <Skeleton className="w-full h-12" />
+      </div>
+      <div className="flex items-center gap-3 mx-2 mb-4">
+        <Skeleton className="w-20 h-12" />
+        <Skeleton className="w-full h-12" />
+      </div>
+      <div className="flex items-center gap-3 mx-2 mb-4">
+        <Skeleton className="w-20 h-12" />
+        <Skeleton className="w-full h-12" />
+      </div>
+    </div>
+  );
+};
+interface ServerTsError {
+  id: string;
+  name: string;
+  inviteCode: string;
+  imageUrl: string;
+}
